@@ -1,16 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-using PathCreation;
-using Unity.VisualScripting;
-using System.IO;
-using System.Drawing.Printing;
-using static UnityEditor.FilePathAttribute;
-using UnityEngine.UIElements;
 using UnityEngine.Rendering;
-using log4net.Util;
-using System.Linq;
+using static UnityEditor.PlayerSettings;
 
 namespace PathCreation
 {
@@ -279,7 +270,31 @@ namespace PathCreation
             // snap flat (keep y the same)
             else if (ToolbarInt == 2)
             {
-                return new Vector3(location.x, flatPlaneReferenceVector.y, location.z);
+                Vector2 mousePos = GetMouseScreenPos();
+                Ray ray = cam.ScreenPointToRay(mousePos);
+
+                float desiredY = flatPlaneReferenceVector.y;
+
+                if (Mathf.Abs(ray.direction.y) > 0.0001f) // Avoid dividing by zero or near-zero
+                {
+                    float t = (desiredY - ray.origin.y) / ray.direction.y; // Solve for t
+
+                    if (t >= 0) // Only consider intersections in the ray's forward direction
+                    {
+                        Vector3 intersectionPoint = ray.origin + t * ray.direction;
+                        return intersectionPoint;
+                    }
+                    else
+                    {
+                        Debug.Log("The intersection is behind the ray's origin");
+                        return location;
+                    }
+                }
+                else
+                {
+                    Debug.Log("Ray is parallel to the plane at y = " + desiredY);
+                    return location;
+                }
             }
             else
             {
