@@ -287,13 +287,13 @@ namespace PathCreation
                     else
                     {
                         Debug.Log("The intersection is behind the ray's origin");
-                        return location;
+                        return new Vector3(location.x, flatPlaneReferenceVector.y, location.z); ;
                     }
                 }
                 else
                 {
                     Debug.Log("Ray is parallel to the plane at y = " + desiredY);
-                    return location;
+                    return new Vector3(location.x, flatPlaneReferenceVector.y, location.z); ;
                 }
             }
             else
