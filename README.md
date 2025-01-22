@@ -15,6 +15,8 @@ M = planar snapping
 
 CAPSLOCK = move each individual vertex using transform gizmos
 
+SHIFT A = add new vertex
+SHIFT CLICK = delete vertex
 
 Some useful functions you can use is VertexPath's MoveConstantVelocity which takes in a velocity
 and will return a Vector3 of the next position in the path that the object must move toward.
